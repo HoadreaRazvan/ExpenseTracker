@@ -1,0 +1,32 @@
+﻿@page "/ToDo"
+@using Microsoft.AspNetCore.WebUtilities
+@inject NavigationManager NavManager
+
+<h3>@Titlu</h3>
+
+<input @bind="newTask" placeholder="" />
+<button @onclick="AddTask">Add</button>
+
+<ul>
+    @foreach (var task in tasks)
+    {
+        <li>@task</li>
+    }
+</ul>
+
+@code {
+    private string Titlu = "To do list";
+
+    private string newTask = "";
+    private List<string> tasks = new();
+
+
+    private void AddTask()
+    {
+        if (this.newTask != "")
+        {
+            tasks.Add(newTask);
+            newTask = "";
+        }
+    }
+}
