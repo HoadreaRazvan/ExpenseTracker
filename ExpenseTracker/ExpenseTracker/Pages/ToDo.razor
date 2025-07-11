@@ -1,8 +1,7 @@
-﻿@page "/ToDo"
-@using Microsoft.AspNetCore.WebUtilities
-@inject NavigationManager NavManager
+﻿@page "/todo"
 
-<h3>@Titlu</h3>
+<NavMenu />
+<h1>@Titlu</h1>
 
 <input @bind="newTask" placeholder="" />
 <button @onclick="AddTask">Add</button>
@@ -15,7 +14,7 @@
 </ul>
 
 @code {
-    private string Titlu = "To do list";
+    private string Titlu = "To Do";
 
     private string newTask = "";
     private List<string> tasks = new();

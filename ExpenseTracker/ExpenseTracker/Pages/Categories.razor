@@ -1,0 +1,71 @@
+﻿@page "/categories"
+@using ExpenseTracker.Data
+@using Microsoft.AspNetCore.Components.Forms
+
+<NavMenu />
+<h1>Categories</h1>
+
+<EditForm Model="newCategory" OnValidSubmit="AddCategory">
+    <div>
+        <label>Id:</label>
+        <InputNumber @bind-Value="newCategory.Id" class="form-control" />
+    </div>
+    <div>
+        <label>Name:</label>
+        <InputText @bind-Value="newCategory.Name" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Add Category</button>
+</EditForm>
+
+<h4 class="mt-4">Category List</h4>
+<ul>
+    @foreach (var category in categories)
+    {
+        <li>
+            @category.Id - @category.Name
+            <button class="btn btn-danger btn-sm ms-2" @onclick="() => DeleteCategory(category.Id)">Delete</button>
+        </li>
+    }
+</ul>
+
+@code {
+    private List<Category> categories = new List<Category>
+    {
+        new Category { Id = 1, Name = "Food" },
+        new Category { Id = 2, Name = "House" },
+        new Category { Id = 3, Name = "Entertainment" }
+    };
+
+    private Category newCategory = new Category();
+
+    private void AddCategory()
+    {
+        int ok = 1;
+        for (int i = 0; i < categories.Count; i++)
+        {
+            if (categories[i].Id == newCategory.Id)
+            {
+                ok = 0;
+                break;
+            }
+        }
+
+        if (ok==1 && newCategory.Name != null)
+        {
+            categories.Add(new Category { Id = newCategory.Id, Name = newCategory.Name });
+            newCategory = new Category();
+        }
+    }
+
+    private void DeleteCategory(int id)
+    {
+        for (int i = 0; i < categories.Count; i++)
+        {
+            if (categories[i].Id == id)
+            {
+                categories.Remove(categories[i]);
+                break;
+            }
+        }
+    }
+}

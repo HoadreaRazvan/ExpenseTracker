@@ -30,3 +30,4 @@ D:\1_PROGRAMMING\C#\2_PROJECTS\ExpenseTracker\ExpenseTracker\ExpenseTracker\obj\
 D:\1_PROGRAMMING\C#\2_PROJECTS\ExpenseTracker\ExpenseTracker\ExpenseTracker\obj\Debug\net7.0\ExpenseTracker.pdb
 D:\1_PROGRAMMING\C#\2_PROJECTS\ExpenseTracker\ExpenseTracker\ExpenseTracker\obj\Debug\net7.0\ExpenseTracker.genruntimeconfig.cache
 D:\1_PROGRAMMING\C#\2_PROJECTS\ExpenseTracker\ExpenseTracker\ExpenseTracker\obj\Debug\net7.0\ref\ExpenseTracker.dll
+D:\1_PROGRAMMING\C#\2_PROJECTS\ExpenseTracker\ExpenseTracker\ExpenseTracker\obj\Debug\net7.0\ExpenseTracker.sourcelink.json

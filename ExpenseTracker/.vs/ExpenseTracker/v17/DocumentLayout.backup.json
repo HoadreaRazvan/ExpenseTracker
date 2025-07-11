@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|d:\\1_programming\\c#\\2_projects\\expensetracker\\expensetracker\\expensetracker\\pages\\todo.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|solutionrelative:expensetracker\\pages\\todo.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|d:\\1_programming\\c#\\2_projects\\expensetracker\\expensetracker\\expensetracker\\pages\\categories.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|solutionrelative:expensetracker\\pages\\categories.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|d:\\1_programming\\c#\\2_projects\\expensetracker\\expensetracker\\expensetracker\\pages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|solutionrelative:expensetracker\\pages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|d:\\1_programming\\c#\\2_projects\\expensetracker\\expensetracker\\expensetracker\\pages\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|solutionrelative:expensetracker\\pages\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|d:\\1_programming\\c#\\2_projects\\expensetracker\\expensetracker\\expensetracker\\pages\\todo.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|solutionrelative:expensetracker\\pages\\todo.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|d:\\1_programming\\c#\\2_projects\\expensetracker\\expensetracker\\expensetracker\\data\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{53CF1165-B4A0-48C9-9A47-4A8226D23BC5}|ExpenseTracker\\ExpenseTracker.csproj|solutionrelative:expensetracker\\data\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,15 +58,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ToDo.razor",
-              "DocumentMoniker": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\ExpenseTracker\\Pages\\ToDo.razor",
-              "RelativeDocumentMoniker": "ExpenseTracker\\Pages\\ToDo.razor",
-              "ToolTip": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\ExpenseTracker\\Pages\\ToDo.razor*",
-              "RelativeToolTip": "ExpenseTracker\\Pages\\ToDo.razor*",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAuwBgAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "NavMenu.razor",
+              "DocumentMoniker": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\ExpenseTracker\\Pages\\NavMenu.razor",
+              "RelativeDocumentMoniker": "ExpenseTracker\\Pages\\NavMenu.razor",
+              "ToolTip": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\ExpenseTracker\\Pages\\NavMenu.razor",
+              "RelativeToolTip": "ExpenseTracker\\Pages\\NavMenu.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-08T08:20:19.742Z",
+              "WhenOpened": "2025-07-11T07:30:38.401Z",
               "EditorCaption": ""
             },
             {
@@ -65,9 +77,48 @@
               "RelativeDocumentMoniker": "ExpenseTracker\\Pages\\Index.razor",
               "ToolTip": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\ExpenseTracker\\Pages\\Index.razor",
               "RelativeToolTip": "ExpenseTracker\\Pages\\Index.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAPAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-07-08T08:17:00.266Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Categories.razor",
+              "DocumentMoniker": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\ExpenseTracker\\Pages\\Categories.razor",
+              "RelativeDocumentMoniker": "ExpenseTracker\\Pages\\Categories.razor",
+              "ToolTip": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\ExpenseTracker\\Pages\\Categories.razor*",
+              "RelativeToolTip": "ExpenseTracker\\Pages\\Categories.razor*",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAADoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-11T07:24:20.156Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ToDo.razor",
+              "DocumentMoniker": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\ExpenseTracker\\Pages\\ToDo.razor",
+              "RelativeDocumentMoniker": "ExpenseTracker\\Pages\\ToDo.razor",
+              "ToolTip": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\ExpenseTracker\\Pages\\ToDo.razor",
+              "RelativeToolTip": "ExpenseTracker\\Pages\\ToDo.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-08T08:20:19.742Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Category.cs",
+              "DocumentMoniker": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\ExpenseTracker\\Data\\Category.cs",
+              "RelativeDocumentMoniker": "ExpenseTracker\\Data\\Category.cs",
+              "ToolTip": "D:\\1_PROGRAMMING\\C#\\2_PROJECTS\\ExpenseTracker\\ExpenseTracker\\ExpenseTracker\\Data\\Category.cs",
+              "RelativeToolTip": "ExpenseTracker\\Data\\Category.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-11T07:22:40.398Z",
               "EditorCaption": ""
             }
           ]
