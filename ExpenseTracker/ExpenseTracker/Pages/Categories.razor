@@ -1,7 +1,9 @@
 ﻿@page "/categories"
 @using ExpenseTracker.Data
 @using ExpenseTracker.Data.Models
+@using ExpenseTracker.Services
 @using Microsoft.AspNetCore.Components.Forms
+@inject CategoryService Service
 
 <NavMenu />
 <h1>Categories</h1>
@@ -30,14 +32,13 @@
 </ul>
 
 @code {
-    private List<Category> categories = new List<Category>
-    {
-        new Category { Id = 1, Name = "Food" },
-        new Category { Id = 2, Name = "House" },
-        new Category { Id = 3, Name = "Entertainment" }
-    };
-
+    private List<Category> categories = new(); 
     private Category newCategory = new Category();
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await Service.GetAllCategoriesAsync();
+    }
 
     private void AddCategory()
     {
@@ -51,7 +52,7 @@
             }
         }
 
-        if (ok==1 && newCategory.Name != null)
+        if (ok == 1 && newCategory.Name != null)
         {
             categories.Add(new Category { Id = newCategory.Id, Name = newCategory.Name });
             newCategory = new Category();
