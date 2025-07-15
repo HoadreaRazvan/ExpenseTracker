@@ -1,0 +1,55 @@
+﻿@page "/incomes/add"
+@using Microsoft.AspNetCore.Components.Forms
+@using ExpenseTracker.Services
+@using ExpenseTracker.Data.Models
+@inject IncomeService IncomeService
+@inject NavigationManager Nav
+
+<h3>Add Income</h3>
+
+<EditForm Model="newIncome" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label>Title:</label>
+        <InputText class="form-control" @bind-Value="newIncome.Title" />
+    </div>
+
+    <div class="mb-3">
+        <label>Date:</label>
+        <InputDate class="form-control" @bind-Value="newIncome.Date" />
+    </div>
+
+    <div class="mb-3">
+        <label>Amount:</label>
+        <InputNumber class="form-control" @bind-Value="newIncome.Amount" />
+    </div>
+
+    <div class="mb-3">
+        <label>Type:</label>
+        <InputSelect class="form-control" @bind-Value="newIncome.Type">
+            @foreach (var type in Enum.GetValues<IncomeType>())
+            {
+                <option value="@type">@type</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Income</button>
+</EditForm>
+
+@code {
+    private Income newIncome = new Income
+        {
+            Date = DateTime.Today,
+            Type = IncomeType.Salary
+        };
+
+    private async Task HandleValidSubmit()
+    {
+        newIncome.Date = DateTime.SpecifyKind(newIncome.Date, DateTimeKind.Utc);
+        await IncomeService.AddIncomeAsync(newIncome);
+        Nav.NavigateTo("/incomes");
+    }
+}
