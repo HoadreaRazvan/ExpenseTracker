@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<ExpenseService>();
 
 builder.Services.AddDbContext<ExpenseTrackerContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("ExpenseTrackerDatabase")));
@@ -16,7 +17,6 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

@@ -1,0 +1,57 @@
+﻿@using ExpenseTracker.Data.Models
+@using Microsoft.AspNetCore.Components.Forms
+
+<EditForm Model="ExpenseModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label>Title</label>
+        <InputText @bind-Value="ExpenseModel.Title" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Date</label>
+        <InputDate @bind-Value="ExpenseModel.Date" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Amount</label>
+        <InputNumber @bind-Value="ExpenseModel.Amount" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Planned</label>
+        <InputCheckbox @bind-Value="ExpenseModel.Planned" class="form-check-input" />
+    </div>
+
+    <div class="mb-3">
+        <label>Category</label>
+        <InputSelect @bind-Value="ExpenseModel.CategoryId" class="form-select">
+            <option value="">-- Select Category --</option>
+            @foreach (var category in Categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Expense ExpenseModel { get; set; }
+
+    [Parameter]
+    public List<Category> Categories { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<Expense> OnValidSubmit { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        ExpenseModel.Date = DateTime.SpecifyKind(ExpenseModel.Date, DateTimeKind.Utc);
+        await OnValidSubmit.InvokeAsync(ExpenseModel);
+    }
+}

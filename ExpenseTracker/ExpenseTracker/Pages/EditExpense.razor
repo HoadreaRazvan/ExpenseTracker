@@ -1,0 +1,44 @@
+﻿@page "/expenses/{expenseId:int}"
+@using ExpenseTracker.Data.Models
+@using ExpenseTracker.Services
+@inject ExpenseService ExpenseService
+@inject CategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+<NavMenu />
+<h1>Edit Expense</h1>
+
+@if (expense == null || categories.Count == 0)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ExpenseForm ExpenseModel="expense" Categories="categories" OnValidSubmit="HandleSave" />
+}
+
+@code {
+    [Parameter]
+    public int expenseId { get; set; }
+
+    private Expense expense;
+    private List<Category> categories = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        expense = ExpenseService.GetExpenseById(expenseId);
+        if (expense == null)
+        {
+            NavigationManager.NavigateTo("/expenses");
+            return;
+        }
+
+        categories = await CategoryService.GetAllCategoriesAsync();
+    }
+
+    private void HandleSave(Expense updatedExpense)
+    {
+        ExpenseService.UpdateExpense(updatedExpense);
+        NavigationManager.NavigateTo("/expenses");
+    }
+}
