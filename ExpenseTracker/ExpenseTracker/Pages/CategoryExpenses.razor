@@ -1,0 +1,36 @@
+﻿@page "/categories/{CategoryId:int}/expenses"
+@using ExpenseTracker.Data.Models
+@using ExpenseTracker.Services
+@inject ExpenseService ExpenseService
+@inject CategoryService CategoryService
+
+<NavMenu/>
+<h1>Expenses for category: @categoryName</h1>
+
+@if (expenses == null || !expenses.Any())
+{
+    <p>No expenses found for this category.</p>
+}
+else
+{
+    <ul>
+        @foreach (var expense in expenses)
+        {
+            <li>@expense.Title - @expense.Amount RON - @expense.Date.ToShortDateString()</li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter] public int CategoryId { get; set; }
+
+    private List<Expense> expenses = new();
+    private string categoryName = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        expenses = ExpenseService.GetExpensesByCategory(CategoryId);
+        var category = CategoryService.GetCategoryDetails().FirstOrDefault(c => c.Id == CategoryId);
+        categoryName = category?.Name ?? "Unknown Category";
+    }
+}

@@ -24,7 +24,9 @@
     @foreach (var category in categories)
     {
         <li>
-            @category.Id - @category.Name
+            <a href="@($"/categories/{category.Id}/expenses")">
+                @category.Id - @category.Name
+            </a>
             <button class="btn btn-danger btn-sm ms-2" @onclick="() => DeleteCategory(category.Id)">Delete</button>
         </li>
     }

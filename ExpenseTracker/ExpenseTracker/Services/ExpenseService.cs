@@ -1,5 +1,6 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Data.Models;
+using ExpenseTracker.Pages;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Services
@@ -49,5 +50,15 @@ namespace ExpenseTracker.Services
                 _context.SaveChanges();
             }
         }
+
+        public List<Expense> GetExpensesByCategory(int categoryId)
+        {
+            return _context.Expenses
+                           .Where(e => e.CategoryId == categoryId)
+                           .Include(e => e.Category)
+                           .ToList();
+        }
+
+
     }
 }

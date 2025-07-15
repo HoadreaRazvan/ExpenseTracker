@@ -36,6 +36,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0ZWdvcmllcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/1_PROGRAMMING/C\#/2_PROJECTS/ExpenseTracker/ExpenseTracker/ExpenseTracker/Pages/CategoryExpenses.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0ZWdvcnlFeHBlbnNlcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/1_PROGRAMMING/C\#/2_PROJECTS/ExpenseTracker/ExpenseTracker/ExpenseTracker/Pages/EditExpense.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdEV4cGVuc2UucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
