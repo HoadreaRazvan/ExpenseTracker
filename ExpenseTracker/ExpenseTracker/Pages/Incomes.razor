@@ -1,76 +1,271 @@
 ﻿@page "/incomes"
 @using ExpenseTracker.Services
-@inject IncomeService IncomeService
 @using ExpenseTracker.Data.Models
+@inject IncomeService IncomeService
+@inject NavigationManager Navigation
 @using System.Globalization
 
 <NavMenu />
-<h1>Incomes</h1>
 
-<a class="btn btn-success mb-3" href="/incomes/add">Add Income</a>
+<style>
+    .incomes-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
 
-<div class="row mb-3">
-    <div class="col-md-3">
-        <label>Start Date</label>
-        <input type="date" class="form-control" @bind="startDate" />
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .filter-bar {
+        display: flex;
+        justify-content: space-between; 
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .filters-group {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+
+    .filter-input {
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        background: #f8fafc;
+    }
+
+    .filter-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .filter-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+    .btn-add-income {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0;
+    }
+
+        .btn-add-income:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+    .incomes-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+        .incomes-table th, .incomes-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .incomes-table th {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+    .btn-edit {
+        background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+        .btn-edit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(234, 179, 8, 0.3);
+        }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+        .btn-delete:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+        }
+
+    .total-bar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #64748b;
+    }
+</style>
+
+<div class="incomes-container">
+    <div class="page-header">
+        <h1 class="page-title">Incomes Management</h1>
+        <p class="page-subtitle">Track and manage your incomes effectively</p>
     </div>
-    <div class="col-md-3">
-        <label>End Date</label>
-        <input type="date" class="form-control" @bind="endDate" />
+
+    <div class="filter-bar">
+        <div class="filters-group">
+            <label>Start Date:</label>
+            <input type="date" class="filter-input" @bind="startDate" />
+
+            <label>End Date:</label>
+            <input type="date" class="filter-input" @bind="endDate" />
+
+            <label>Type:</label>
+            <select class="filter-input" @bind="selectedType">
+                <option value="">All</option>
+                @foreach (IncomeType type in Enum.GetValues(typeof(IncomeType)))
+                {
+                    <option value="@type">@type.GetDescription()</option>
+                }
+            </select>
+
+            <label>Sort By:</label>
+            <select class="filter-input" @bind="sortOrder">
+                <option value="None">None</option>
+                <option value="Asc">Amount Ascending</option>
+                <option value="Desc">Amount Descending</option>
+            </select>
+
+            <button class="filter-button" @onclick="ApplyFilter">Filter</button>
+        </div>
+
+        <button class="btn-add-income" @onclick="GoToAddIncome">
+            <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+            </svg>
+            Add New Income
+        </button>
     </div>
-    <div class="col-md-3 d-flex align-items-end">
-        <button class="btn btn-primary" @onclick="ApplyFilter">Filter</button>
-    </div>
+
+    @if (filteredIncomes == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else if (!filteredIncomes.Any())
+    {
+        <div class="empty-state">
+            <h3>No Incomes Found</h3>
+            <p>Try adjusting your filters or add a new income.</p>
+        </div>
+    }
+    else
+    {
+        <div class="total-bar">
+            <span>Total Incomes: <strong>@filteredIncomes.Count</strong></span>
+            <span>Total Amount: <strong>@filteredIncomes.Sum(i => i.Amount).ToString("C", CultureInfo.CurrentCulture)</strong></span>
+        </div>
+
+        <table class="incomes-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var income in filteredIncomes)
+                {
+                    <tr>
+                        <td>@income.Title</td>
+                        <td>@income.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@income.Amount.ToString("C", CultureInfo.CurrentCulture)</td>
+                        <td>@income.Type.GetDescription()</td>
+                        <td>
+                            <button class="btn-edit" @onclick="() => EditIncome(income.Id)">Edit</button>
+                        </td>
+                        <td>
+                            <button class="btn-delete" @onclick="() => DeleteIncome(income.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
 
-@if (filteredIncomes == null)
-{
-    <p>Loading...</p>
-}
-else if (!filteredIncomes.Any())
-{
-    <p>No incomes found for selected interval.</p>
-}
-else
-{
-    <p><strong>Total Income: @filteredIncomes.Sum(i => i.Amount).ToString("C", CultureInfo.CurrentCulture)</strong></p>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Type</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var income in filteredIncomes)
-            {
-                <tr>
-                    <td>@income.Title</td>
-                    <td>@income.Date.ToShortDateString()</td>
-                    <td>@income.Amount.ToString("C", CultureInfo.CurrentCulture)</td>
-                    <td>@income.Type.GetDescription()</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href="/incomes/edit/@income.Id">Edit</a>
-                        <button class="btn btn-danger btn-sm" @onclick="() => DeleteIncome(income.Id)">Delete</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+<Footer />
 
 @code {
     private List<Income> allIncomes = new();
     private List<Income> filteredIncomes = new();
-
     private DateTime? startDate;
     private DateTime? endDate;
+    private string selectedType = "";
+    private string sortOrder = "None";
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         allIncomes = IncomeService.GetAllIncomes();
         filteredIncomes = allIncomes;
@@ -78,13 +273,41 @@ else
 
     private void ApplyFilter()
     {
-        filteredIncomes = allIncomes.Where(i =>
-            (!startDate.HasValue || i.Date >= startDate.Value) &&
-            (!endDate.HasValue || i.Date <= endDate.Value)
-        ).ToList();
+        IEnumerable<Income> query = allIncomes;
+
+        if (startDate.HasValue)
+            query = query.Where(i => i.Date >= startDate.Value);
+
+        if (endDate.HasValue)
+            query = query.Where(i => i.Date <= endDate.Value);
+
+        if (!string.IsNullOrEmpty(selectedType))
+        {
+            if (Enum.TryParse<IncomeType>(selectedType, out var type))
+                query = query.Where(i => i.Type == type);
+        }
+
+        query = sortOrder switch
+        {
+            "Asc" => query.OrderBy(i => i.Amount),
+            "Desc" => query.OrderByDescending(i => i.Amount),
+            _ => query
+        };
+
+        filteredIncomes = query.ToList();
     }
 
-    private async Task DeleteIncome(int id)
+    private void GoToAddIncome()
+    {
+        Navigation.NavigateTo("/incomes/add");
+    }
+
+    private void EditIncome(int id)
+    {
+        Navigation.NavigateTo($"/incomes/edit/{id}");
+    }
+
+    private void DeleteIncome(int id)
     {
         IncomeService.DeleteIncome(id);
         allIncomes = IncomeService.GetAllIncomes();

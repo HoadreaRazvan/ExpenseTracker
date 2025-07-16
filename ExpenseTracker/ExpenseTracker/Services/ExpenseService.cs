@@ -25,7 +25,6 @@ namespace ExpenseTracker.Services
             await _context.SaveChangesAsync();
         }
 
-
         public Expense GetExpenseById(int id)
         {
             return _context.Expenses
@@ -58,7 +57,10 @@ namespace ExpenseTracker.Services
                            .Include(e => e.Category)
                            .ToList();
         }
-
+        public List<Category> GetAllCategories()
+        {
+            return _context.Categories.ToList();
+        }
 
     }
 }

@@ -6,16 +6,233 @@
 @inject NavigationManager NavigationManager
 
 <NavMenu />
-<h1>Edit Expense</h1>
 
-@if (expense == null || categories.Count == 0)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <ExpenseForm ExpenseModel="expense" Categories="categories" OnValidSubmit="HandleSave" />
-}
+<style>
+    .expenses-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+        color: #64748b;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+
+    .form-container {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 1rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        background: #f8fafc;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+    .form-select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        background: #f8fafc;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+    .form-check-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+    .form-check-input {
+        width: 1.2rem;
+        height: 1.2rem;
+        accent-color: #667eea;
+        cursor: pointer;
+    }
+
+    .form-check-label {
+        font-weight: 500;
+        color: #475569;
+        cursor: pointer;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.875rem 2.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+    .btn-cancel {
+        background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+        color: white;
+        border: none;
+        padding: 0.875rem 2.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
+        .btn-cancel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(100, 116, 139, 0.3);
+        }
+
+    .validation-summary {
+        background: linear-gradient(135deg, #fef2f2 0%, #fde8e8 100%);
+        border: 1px solid #fca5a5;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        color: #dc2626;
+    }
+
+        .validation-summary ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+    .loading-container {
+        text-align: center;
+        padding: 3rem;
+        color: #64748b;
+    }
+
+    .loading-spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #e2e8f0;
+        border-radius: 50%;
+        border-top-color: #667eea;
+        animation: spin 1s ease-in-out infinite;
+        margin-bottom: 1rem;
+    }
+
+
+
+    .icon {
+        width: 1.2rem;
+        height: 1.2rem;
+        fill: currentColor;
+    }
+
+    .form-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 2rem;
+    }
+
+
+    .btn-save, .btn-cancel {
+        width: auto;
+        flex: 1;
+    }
+
+    }</style>
+
+<div class="expenses-container">
+    <div class="page-header">
+        <h1 class="page-title">Edit Expense</h1>
+        <p class="page-subtitle">Modify an existing expense record</p>
+    </div>
+
+    @if (expense == null || categories.Count == 0)
+    {
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p><em>Loading expense data...</em></p>
+        </div>
+    }
+    else
+    {
+        <div class="form-container">
+            <ExpenseForm ExpenseModel="expense" Categories="categories" OnValidSubmit="HandleSave" />
+        </div>
+    }
+</div>
+<Footer />
 
 @code {
     [Parameter]
@@ -36,8 +253,9 @@ else
         categories = await CategoryService.GetAllCategoriesAsync();
     }
 
-    private void HandleSave(Expense updatedExpense)
+    private async Task HandleSave(Expense updatedExpense)
     {
+        updatedExpense.Date = DateTime.SpecifyKind(updatedExpense.Date, DateTimeKind.Utc);
         ExpenseService.UpdateExpense(updatedExpense);
         NavigationManager.NavigateTo("/expenses");
     }

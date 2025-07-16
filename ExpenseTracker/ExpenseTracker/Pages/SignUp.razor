@@ -1,0 +1,26 @@
+﻿@page "/signup"
+@using ExpenseTracker.Services
+
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<h3>Sign Up</h3>
+@if (!string.IsNullOrEmpty(error))
+{
+    <div style="color:red">@error</div>
+}
+<input @bind="username" placeholder="Username" />
+<input @bind="password" placeholder="Password" type="password" />
+<button @onclick="HandleSignUp">Sign Up</button>
+
+@code {
+    string username, password, error;
+
+    void HandleSignUp()
+    {
+        if (AuthService.Register(username, password))
+            Navigation.NavigateTo("/login");
+        else
+            error = "Username already exists";
+    }
+}

@@ -3,30 +3,33 @@
 
 <EditForm Model="ExpenseModel" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
-    <ValidationSummary />
+    <ValidationSummary class="validation-summary" />
 
-    <div class="mb-3">
-        <label>Title</label>
-        <InputText @bind-Value="ExpenseModel.Title" class="form-control" />
+    <div class="form-group">
+        <label class="form-label">Title</label>
+        <InputText @bind-Value="ExpenseModel.Title" class="form-control" placeholder="Enter expense title" />
     </div>
 
-    <div class="mb-3">
-        <label>Date</label>
+    <div class="form-group">
+        <label class="form-label">Date</label>
         <InputDate @bind-Value="ExpenseModel.Date" class="form-control" />
     </div>
 
-    <div class="mb-3">
-        <label>Amount</label>
-        <InputNumber @bind-Value="ExpenseModel.Amount" class="form-control" />
+    <div class="form-group">
+        <label class="form-label">Amount</label>
+        <InputNumber @bind-Value="ExpenseModel.Amount" class="form-control" placeholder="0.00" />
     </div>
 
-    <div class="mb-3">
-        <label>Planned</label>
-        <InputCheckbox @bind-Value="ExpenseModel.Planned" class="form-check-input" />
+    <div class="form-group">
+        <label class="form-label">Planned Expense</label>
+        <div class="form-check-container">
+            <InputCheckbox @bind-Value="ExpenseModel.Planned" class="form-check-input" />
+            <label class="form-check-label">This is a planned expense</label>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label>Category</label>
+    <div class="form-group">
+        <label class="form-label">Category</label>
         <InputSelect @bind-Value="ExpenseModel.CategoryId" class="form-select">
             <option value="">-- Select Category --</option>
             @foreach (var category in Categories)
@@ -36,7 +39,20 @@
         </InputSelect>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
+    <div class="form-actions">
+        <button type="submit" class="btn-save">
+            <svg class="icon" viewBox="0 0 24 24">
+                <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+            </svg>
+            Save Expense
+        </button>
+        <button type="button" class="btn-cancel" @onclick="GoBack">
+            <svg class="icon" viewBox="0 0 24 24">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Cancel
+        </button>
+    </div>
 </EditForm>
 
 @code {
@@ -49,9 +65,17 @@
     [Parameter]
     public EventCallback<Expense> OnValidSubmit { get; set; }
 
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
     private async Task HandleValidSubmit()
     {
         ExpenseModel.Date = DateTime.SpecifyKind(ExpenseModel.Date, DateTimeKind.Utc);
         await OnValidSubmit.InvokeAsync(ExpenseModel);
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/expenses");
     }
 }

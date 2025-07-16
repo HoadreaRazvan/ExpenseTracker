@@ -60,6 +60,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXhwZW5zZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/1_PROGRAMMING/C\#/2_PROJECTS/ExpenseTracker/ExpenseTracker/ExpenseTracker/Pages/Footer.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9vdGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/1_PROGRAMMING/C\#/2_PROJECTS/ExpenseTracker/ExpenseTracker/ExpenseTracker/Pages/Incomes.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5jb21lcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -68,8 +72,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/1_PROGRAMMING/C\#/2_PROJECTS/ExpenseTracker/ExpenseTracker/ExpenseTracker/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/1_PROGRAMMING/C\#/2_PROJECTS/ExpenseTracker/ExpenseTracker/ExpenseTracker/Pages/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTmF2TWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/1_PROGRAMMING/C\#/2_PROJECTS/ExpenseTracker/ExpenseTracker/ExpenseTracker/Pages/SignUp.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2lnblVwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/1_PROGRAMMING/C\#/2_PROJECTS/ExpenseTracker/ExpenseTracker/ExpenseTracker/Pages/ToDo.razor]

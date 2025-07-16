@@ -5,33 +5,246 @@
 
 <NavMenu />
 
-<h1>Home</h1>
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .cards-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+
+    .card {
+        flex: 1 1 250px;
+        background: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        padding: 1.5rem;
+        transition: transform 0.2s ease;
+        text-align: center;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+    .income-card {
+        border-left: 5px solid #4caf50;
+    }
+
+    .expenses-card {
+        border-left: 5px solid #ef4444;
+    }
+
+    .balance-card {
+        border-left: 5px solid #3b82f6;
+    }
+
+    .monthly-income-card {
+        border-left: 5px solid #81c784;
+    }
+
+    .monthly-expenses-card {
+        border-left: 5px solid #e57373;
+    }
+
+    .planned-card {
+        border-left: 5px solid #4db6ac;
+    }
+
+    .unplanned-card {
+        border-left: 5px solid #ffb74d;
+    }
+
+    h1, h2, h3, h4 {
+        margin-bottom: 0.5rem;
+        color: #1e293b;
+    }
+
+    .amount {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0.5rem 0;
+        color: #1e293b;
+    }
+
+    .category-highlight {
+        background-color: #f8fafc;
+        padding: 1rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1.2rem;
+        display: inline-block;
+    }
+
+    .loading-container {
+        text-align: center;
+        margin-top: 5rem;
+        font-size: 1.2rem;
+        color: #64748b;
+    }
+
+    section ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+        section ul li {
+            background-color: #e0e7ff;
+            margin-bottom: 0.5rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            color: #3730a3;
+        }
+</style>
 
 @if (isLoading)
 {
-    <p>Loading...</p>
+    <div class="loading-container">
+        <p>Loading...</p>
+    </div>
 }
 else
 {
-    <div>
-        <h3>Statistici generale</h3>
-        <p><strong>Total Venituri:</strong> @TotalIncome.ToString("C") (@IncomeStartDate.ToShortDateString() - @IncomeEndDate.ToShortDateString())</p>
-        <p><strong>Total Cheltuieli:</strong> @TotalExpenses.ToString("C") (@ExpenseStartDate.ToShortDateString() - @ExpenseEndDate.ToShortDateString())</p>
+    <div class="dashboard-container">
+        <div class="page-header">
+            <h1 class="page-title">Financial Dashboard</h1>
+            <p class="page-subtitle">Overview of your financial statistics</p>
+        </div>
 
-        <h3>Statistici lunare (@CurrentMonthName)</h3>
-        <p><strong>Venituri luna curenta:</strong> @MonthlyIncome.ToString("C")</p>
-        <p><strong>Cheltuieli luna curenta:</strong> @MonthlyExpenses.ToString("C")</p>
+        <div class="cards-row">
+            <div class="card income-card">
+                <h3>Total Income</h3>
+                <p class="amount">@TotalIncome.ToString("C")</p>
+                <small>@IncomeStartDate.ToShortDateString() - @IncomeEndDate.ToShortDateString()</small>
+            </div>
 
-        <h3>Balance:</h3>
-        <p style="color:@(Balance >= 0 ? "green" : "red")">
-            $@Balance
-        </p>
+            <div class="card expenses-card">
+                <h3>Total Expenses</h3>
+                <p class="amount">@TotalExpenses.ToString("C")</p>
+                <small>@ExpenseStartDate.ToShortDateString() - @ExpenseEndDate.ToShortDateString()</small>
+            </div>
 
-        <h3>Cheltuieli Planificate / Neplanificate</h3>
-        <p><strong>Cheltuieli Planificate:</strong> @PlannedExpenses.ToString("C")</p>
-        <p><strong>Cheltuieli Neplanificate:</strong> @UnplannedExpenses.ToString("C")</p>
+            <div class="card balance-card" style="border-color:@(Balance >= 0 ? "green" : "red")">
+                <h3>Balance</h3>
+                <p class="amount" style="color:@(Balance >= 0 ? "green" : "red")">
+                    $@Balance
+                </p>
+            </div>
+        </div>
+
+        <section class="monthly-stats">
+            <h2>Statistics for @CurrentMonthName</h2>
+            <div class="cards-row">
+                <div class="card monthly-income-card">
+                    <h4>Monthly Income</h4>
+                    <p class="amount">@MonthlyIncome.ToString("C")</p>
+                </div>
+
+                <div class="card monthly-expenses-card">
+                    <h4>Monthly Expenses</h4>
+                    <p class="amount">@MonthlyExpenses.ToString("C")</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="planned-expenses">
+            <h2>Planned vs Unplanned Expenses</h2>
+            <div class="cards-row">
+                <div class="card planned-card">
+                    <h4>Planned</h4>
+                    <p class="amount">@PlannedExpenses.ToString("C")</p>
+                </div>
+                <div class="card unplanned-card">
+                    <h4>Unplanned</h4>
+                    <p class="amount">@UnplannedExpenses.ToString("C")</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="highest-category">
+            <h2>Highest Expense by Category</h2>
+            @if (HighestCategory != null)
+            {
+                <div class="card income-card">
+                    <h3>@HighestCategory.Name</h3>
+                    <p class="amount">@HighestCategoryAmount.ToString("C")</p>
+                </div>
+            }
+            else
+            {
+                <p class="category-highlight">No expenses recorded by category.</p>
+            }
+        </section>
+
+        <section class="expenses-by-category" style="margin-top: 3rem;">
+            <h2>Expenses by Category</h2>
+            @if (ExpensesByCategory.Any())
+            {
+                <div class="cards-row">
+                    @foreach (var item in ExpensesByCategory)
+                    {
+                        <div class="card expenses-card" style="flex: 1 1 200px;">
+                            <h4>@item.CategoryName</h4>
+                            <p class="amount">@item.TotalAmount.ToString("C")</p>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>No expenses by category to display.</p>
+            }
+        </section>
+
+        <section class="monthly-expense-trend" style="margin-top: 2rem;">
+            <h2>Monthly Expense Trend</h2>
+            @if (MonthlyExpensesTrend.Any())
+            {
+                <div class="cards-row">
+                    @foreach (var item in MonthlyExpensesTrend)
+                    {
+                        <div class="card expenses-card" style="flex: 1 1 150px;">
+                            <h4>@item.Month</h4>
+                            <p class="amount">@item.TotalAmount.ToString("C")</p>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>No monthly expense data to display.</p>
+            }
+        </section>
+
     </div>
 }
+
+<Footer />
 
 @code {
     decimal TotalIncome;
@@ -51,6 +264,12 @@ else
     string CurrentMonthName = DateTime.Now.ToString("MMMM yyyy");
 
     bool isLoading = true;
+
+    ExpenseTracker.Data.Models.Category? HighestCategory;
+    decimal HighestCategoryAmount;
+
+    List<(string CategoryName, decimal TotalAmount)> ExpensesByCategory = new();
+    List<(string Month, decimal TotalAmount)> MonthlyExpensesTrend = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -74,6 +293,36 @@ else
 
             PlannedExpenses = expenses.Where(e => e.Planned).Sum(e => e.Amount);
             UnplannedExpenses = expenses.Where(e => !e.Planned).Sum(e => e.Amount);
+
+            var categoryGroup = expenses
+                .Where(e => e.Category != null)
+                .GroupBy(e => e.Category)
+                .Select(g => new
+                {
+                    Category = g.Key,
+                    Total = g.Sum(e => e.Amount)
+                })
+                .OrderByDescending(x => x.Total)
+                .FirstOrDefault();
+
+            if (categoryGroup != null)
+            {
+                HighestCategory = categoryGroup.Category;
+                HighestCategoryAmount = categoryGroup.Total;
+            }
+
+            ExpensesByCategory = expenses
+                .Where(e => e.Category != null)
+                .GroupBy(e => e.Category.Name)
+                .Select(g => (CategoryName: g.Key, TotalAmount: g.Sum(e => e.Amount)))
+                .OrderByDescending(t => t.TotalAmount)
+                .ToList();
+
+            MonthlyExpensesTrend = expenses
+                .GroupBy(e => new { e.Date.Year, e.Date.Month })
+                .Select(g => (Month: $"{g.Key.Month:00}/{g.Key.Year}", TotalAmount: g.Sum(e => e.Amount)))
+                .OrderBy(t => t.Month)
+                .ToList();
         }
 
         Balance = TotalIncome - TotalExpenses;

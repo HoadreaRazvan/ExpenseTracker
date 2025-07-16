@@ -10,6 +10,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ExpenseService>();
 builder.Services.AddScoped<IncomeService>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddDbContext<ExpenseTrackerContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("ExpenseTrackerDatabase")));

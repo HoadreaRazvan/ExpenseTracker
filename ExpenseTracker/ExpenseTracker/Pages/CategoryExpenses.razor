@@ -4,22 +4,104 @@
 @inject ExpenseService ExpenseService
 @inject CategoryService CategoryService
 
-<NavMenu/>
-<h1>Expenses for category: @categoryName</h1>
+<NavMenu />
 
-@if (expenses == null || !expenses.Any())
-{
-    <p>No expenses found for this category.</p>
-}
-else
-{
-    <ul>
-        @foreach (var expense in expenses)
-        {
-            <li>@expense.Title - @expense.Amount RON - @expense.Date.ToShortDateString()</li>
+<style>
+
+    .expenses-list-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+        color: #64748b;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+
+    .expense-list {
+        background: white;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .expense-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 1rem;
+        color: #1e293b;
+    }
+
+        .expense-item:last-child {
+            border-bottom: none;
         }
-    </ul>
-}
+
+    .expense-title {
+        font-weight: 600;
+    }
+
+    .expense-amount {
+        color: #667eea;
+        font-weight: 700;
+    }
+
+    .no-expenses {
+        text-align: center;
+        color: #64748b;
+        font-style: italic;
+        padding: 2rem;
+    }
+</style>
+
+<div class="expenses-list-container">
+    <div class="page-header">
+        <h1 class="page-title">Category: @categoryName</h1>
+        <p class="page-subtitle">Expenses associated with this category</p>
+    </div>
+
+    @if (expenses == null || !expenses.Any())
+    {
+        <div class="no-expenses">
+            <p>No expenses found for this category.</p>
+        </div>
+    }
+    else
+    {
+        <div class="expense-list">
+            @foreach (var expense in expenses)
+            {
+                <div class="expense-item">
+                    <span class="expense-title">@expense.Title</span>
+                    <span class="expense-amount">$@expense.Amount</span>
+                    <span>@expense.Date.ToShortDateString()</span>
+                </div>
+            }
+        </div>
+    }
+</div>
+<Footer />
 
 @code {
     [Parameter] public int CategoryId { get; set; }

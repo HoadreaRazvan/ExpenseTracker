@@ -5,32 +5,399 @@
 @inject CategoryService Service
 
 <NavMenu />
-<h1>Categories</h1>
 
-<EditForm Model="newCategory" OnValidSubmit="AddCategory">
-    <div>
-        <label>Id:</label>
-        <InputNumber @bind-Value="newCategory.Id" class="form-control" />
-    </div>
-    <div>
-        <label>Name:</label>
-        <InputText @bind-Value="newCategory.Name" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary mt-2">Add Category</button>
-</EditForm>
-
-<h4 class="mt-4">Category List</h4>
-<ul>
-    @foreach (var category in categories)
-    {
-        <li>
-            <a href="@($"/categories/{category.Id}/expenses")">
-                @category.Id - @category.Name
-            </a>
-            <button class="btn btn-danger btn-sm ms-2" @onclick="() => DeleteCategory(category.Id)">Delete</button>
-        </li>
+<style>
+    .categories-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
     }
-</ul>
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+        color: #64748b;
+        font-size: 1.1rem;
+        font-weight: 400;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .form-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-icon {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-input {
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8fafc;
+    }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+    .btn-add {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        justify-self: start;
+    }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+    .categories-list {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .list-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #f1f5f9;
+    }
+
+    .list-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1rem;
+    }
+
+    .category-card {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+    .category-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .category-id {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+
+    .category-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e293b;
+        flex: 1;
+    }
+
+    .category-actions {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+
+    .btn-view {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+        .btn-view:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+        .btn-delete:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #64748b;
+    }
+
+    .empty-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1rem;
+        opacity: 0.5;
+    }
+
+    .stats-bar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .icon {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+    }
+
+  
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    }
+</style>
+
+<div class="categories-container">
+    <div class="page-header">
+        <h1 class="page-title">Categories Management</h1>
+        <p class="page-subtitle">Organize your expenses with custom categories</p>
+    </div>
+
+    <div class="form-card">
+        <div class="form-header">
+            <div class="form-icon">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+            </div>
+            <h2 class="form-title">Add New Category</h2>
+        </div>
+
+        <EditForm Model="newCategory" OnValidSubmit="AddCategory">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Category ID</label>
+                    <InputNumber @bind-Value="newCategory.Id" class="form-input" placeholder="Enter ID..." />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category Name</label>
+                    <InputText @bind-Value="newCategory.Name" class="form-input" placeholder="Enter category name..." />
+                </div>
+            </div>
+            <button type="submit" class="btn-add">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+                Add Category
+            </button>
+        </EditForm>
+    </div>
+
+    <div class="categories-list">
+        <div class="list-header">
+            <div class="form-icon">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+            </div>
+            <h2 class="list-title">Your Categories</h2>
+        </div>
+
+        <div class="stats-bar">
+            <span>Total Categories: <strong>@categories.Count</strong></span>
+            <svg class="icon" viewBox="0 0 24 24">
+                <path d="M9 11H7v9h2v-9zm4 0h-2v9h2v-9zm4 0h-2v9h2v-9zm2-7v2H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V8h1V6H4V4h3.5l1-1h5l1 1H19z" />
+            </svg>
+        </div>
+
+        @if (categories.Any())
+        {
+            <div class="category-grid">
+                @foreach (var category in categories)
+                {
+                    <div class="category-card">
+                        <div class="category-info">
+                            <div class="category-id">@category.Id</div>
+                            <div class="category-name">@category.Name</div>
+                        </div>
+                        <div class="category-actions">
+                            <a href="@($"/categories/{category.Id}/expenses")" class="btn-view">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                                </svg>
+                                View Expenses
+                            </a>
+                            <button class="btn-delete" @onclick="() => DeleteCategory(category.Id)">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                                </svg>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <svg class="empty-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <h3>No Categories Yet</h3>
+                <p>Start by adding your first category to organize your expenses.</p>
+            </div>
+        }
+    </div>
+</div>
+<Footer />
 
 @code {
     private List<Category> categories = new();
@@ -56,15 +423,14 @@
                     Id = newCategory.Id,
                     Name = newCategory.Name
                 });
-
-            newCategory = new Category(); 
-            ReloadCategories(); 
+            newCategory = new Category();
+            ReloadCategories();
         }
     }
 
     private void DeleteCategory(int id)
     {
         Service.DeleteCategory(id);
-        ReloadCategories(); 
+        ReloadCategories();
     }
 }

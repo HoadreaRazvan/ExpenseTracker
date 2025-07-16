@@ -1,17 +1,130 @@
 ﻿@page "/todo"
 
 <NavMenu />
-<h1>@Titlu</h1>
 
-<input @bind="newTask" placeholder="" />
-<button @onclick="AddTask">Add</button>
-
-<ul>
-    @foreach (var task in tasks)
-    {
-        <li>@task</li>
+<style>
+    .todo-container {
+        max-width: 800px; 
+        margin: 2rem auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
-</ul>
+
+    .todo-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .todo-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .todo-input-group {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .todo-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        background: #f8fafc;
+        transition: all 0.3s ease;
+    }
+
+        .todo-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+    .btn-add-task {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .btn-add-task:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+    .task-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .task-item {
+        background: white;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-delete-task {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+        .btn-delete-task:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+        }
+</style>
+
+<div class="todo-container">
+    <div class="todo-header">
+        <h1 class="todo-title">@Titlu</h1>
+    </div>
+
+    <div class="todo-input-group">
+        <input class="todo-input" @bind="newTask" placeholder="Enter a new task..." />
+        <button class="btn-add-task" @onclick="AddTask">Add</button>
+    </div>
+
+    @if (!tasks.Any())
+    {
+        <p style="text-align: center; color: #64748b;">No tasks yet. Add one above!</p>
+    }
+    else
+    {
+        <ul class="task-list">
+            @foreach (var task in tasks.Select((text, index) => new { text, index }))
+            {
+                <li class="task-item">
+                    @task.text
+                    <button class="btn-delete-task" @onclick="() => RemoveTask(task.index)">Delete</button>
+                </li>
+            }
+        </ul>
+    }
+</div>
 
 @code {
     private string Titlu = "To Do";
@@ -19,13 +132,20 @@
     private string newTask = "";
     private List<string> tasks = new();
 
-
     private void AddTask()
     {
-        if (this.newTask != "")
+        if (!string.IsNullOrWhiteSpace(newTask))
         {
-            tasks.Add(newTask);
+            tasks.Add(newTask.Trim());
             newTask = "";
+        }
+    }
+
+    private void RemoveTask(int index)
+    {
+        if (index >= 0 && index < tasks.Count)
+        {
+            tasks.RemoveAt(index);
         }
     }
 }
