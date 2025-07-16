@@ -3,22 +3,36 @@
 @using ExpenseTracker.Services
 @inject ExpenseService Service
 @inject NavigationManager Navigation
+@using System.Globalization
 
 <NavMenu />
 <h1>Expenses</h1>
 
 <button class="btn btn-primary mb-3" @onclick="GoToAddExpense">Add New Expense</button>
 
-@if (expenses == null)
+<div class="row mb-3">
+    <div class="col-md-3">
+        <label>Filter by</label>
+        <select class="form-control" @bind="FilterOption">
+            <option value="All">All</option>
+            <option value="Planned">Planned</option>
+            <option value="Unplanned">Unplanned</option>
+        </select>
+    </div>
+</div>
+
+@if (filteredExpenses == null)
 {
     <p><em>Loading...</em></p>
 }
-else if (!expenses.Any())
+else if (!filteredExpenses.Any())
 {
     <p>No expenses recorded yet.</p>
 }
 else
 {
+    <h5>Total Amount: @filteredExpenses.Sum(e => e.Amount).ToString("C", CultureInfo.CurrentCulture)</h5>
+
     <table class="table">
         <thead>
             <tr>
@@ -32,12 +46,12 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var expense in expenses)
+            @foreach (var expense in filteredExpenses)
             {
                 <tr>
                     <td>@expense.Title</td>
                     <td>@expense.Date.ToString("dd/MM/yyyy")</td>
-                    <td>@expense.Amount.ToString("C")</td>
+                    <td>@expense.Amount.ToString("C", CultureInfo.CurrentCulture)</td>
                     <td>@(expense.Planned ? "Yes" : "No")</td>
                     <td>@expense.Category?.Name</td>
                     <td>
@@ -53,11 +67,35 @@ else
 }
 
 @code {
-    private List<Expense> expenses;
+    private List<Expense> expenses = new();
+    private List<Expense> filteredExpenses = new();
+
+    private string filterOption = "All";
+
+    private string FilterOption
+    {
+        get => filterOption;
+        set
+        {
+            filterOption = value;
+            ApplyFilter();
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
         expenses = Service.GetAllExpenses();
+        ApplyFilter();
+    }
+
+    void ApplyFilter()
+    {
+        filteredExpenses = filterOption switch
+        {
+            "Planned" => expenses.Where(e => e.Planned).ToList(),
+            "Unplanned" => expenses.Where(e => !e.Planned).ToList(),
+            _ => expenses
+        };
     }
 
     void GoToAddExpense()
@@ -74,6 +112,7 @@ else
     {
         Service.DeleteExpense(id);
         expenses = Service.GetAllExpenses();
+        ApplyFilter();
         StateHasChanged();
     }
 }

@@ -15,12 +15,10 @@ else
 {
     <div>
         <h3>Statistici generale</h3>
-
         <p><strong>Total Venituri:</strong> @TotalIncome.ToString("C") (@IncomeStartDate.ToShortDateString() - @IncomeEndDate.ToShortDateString())</p>
         <p><strong>Total Cheltuieli:</strong> @TotalExpenses.ToString("C") (@ExpenseStartDate.ToShortDateString() - @ExpenseEndDate.ToShortDateString())</p>
 
         <h3>Statistici lunare (@CurrentMonthName)</h3>
-
         <p><strong>Venituri luna curenta:</strong> @MonthlyIncome.ToString("C")</p>
         <p><strong>Cheltuieli luna curenta:</strong> @MonthlyExpenses.ToString("C")</p>
 
@@ -28,6 +26,10 @@ else
         <p style="color:@(Balance >= 0 ? "green" : "red")">
             $@Balance
         </p>
+
+        <h3>Cheltuieli Planificate / Neplanificate</h3>
+        <p><strong>Cheltuieli Planificate:</strong> @PlannedExpenses.ToString("C")</p>
+        <p><strong>Cheltuieli Neplanificate:</strong> @UnplannedExpenses.ToString("C")</p>
     </div>
 }
 
@@ -37,6 +39,9 @@ else
     decimal MonthlyIncome;
     decimal MonthlyExpenses;
     decimal Balance;
+
+    decimal PlannedExpenses;
+    decimal UnplannedExpenses;
 
     DateTime IncomeStartDate;
     DateTime IncomeEndDate;
@@ -66,6 +71,9 @@ else
             ExpenseEndDate = expenses.Max(e => e.Date);
             TotalExpenses = expenses.Sum(e => e.Amount);
             MonthlyExpenses = expenses.Where(e => e.Date.Month == DateTime.Now.Month && e.Date.Year == DateTime.Now.Year).Sum(e => e.Amount);
+
+            PlannedExpenses = expenses.Where(e => e.Planned).Sum(e => e.Amount);
+            UnplannedExpenses = expenses.Where(e => !e.Planned).Sum(e => e.Amount);
         }
 
         Balance = TotalIncome - TotalExpenses;

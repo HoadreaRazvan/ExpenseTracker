@@ -2,24 +2,39 @@
 @using ExpenseTracker.Services
 @inject IncomeService IncomeService
 @using ExpenseTracker.Data.Models
-@using System.Linq
 @using System.Globalization
 
-<NavMenu/>
+<NavMenu />
 <h1>Incomes</h1>
 
 <a class="btn btn-success mb-3" href="/incomes/add">Add Income</a>
 
-@if (incomes == null)
+<div class="row mb-3">
+    <div class="col-md-3">
+        <label>Start Date</label>
+        <input type="date" class="form-control" @bind="startDate" />
+    </div>
+    <div class="col-md-3">
+        <label>End Date</label>
+        <input type="date" class="form-control" @bind="endDate" />
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-primary" @onclick="ApplyFilter">Filter</button>
+    </div>
+</div>
+
+@if (filteredIncomes == null)
 {
     <p>Loading...</p>
 }
-else if (!incomes.Any())
+else if (!filteredIncomes.Any())
 {
-    <p>No incomes available.</p>
+    <p>No incomes found for selected interval.</p>
 }
 else
 {
+    <p><strong>Total Income: @filteredIncomes.Sum(i => i.Amount).ToString("C", CultureInfo.CurrentCulture)</strong></p>
+
     <table class="table">
         <thead>
             <tr>
@@ -31,7 +46,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var income in incomes)
+            @foreach (var income in filteredIncomes)
             {
                 <tr>
                     <td>@income.Title</td>
@@ -49,16 +64,30 @@ else
 }
 
 @code {
-    private List<Income>? incomes;
+    private List<Income> allIncomes = new();
+    private List<Income> filteredIncomes = new();
+
+    private DateTime? startDate;
+    private DateTime? endDate;
 
     protected override async Task OnInitializedAsync()
     {
-        incomes = IncomeService.GetAllIncomes();
+        allIncomes = IncomeService.GetAllIncomes();
+        filteredIncomes = allIncomes;
+    }
+
+    private void ApplyFilter()
+    {
+        filteredIncomes = allIncomes.Where(i =>
+            (!startDate.HasValue || i.Date >= startDate.Value) &&
+            (!endDate.HasValue || i.Date <= endDate.Value)
+        ).ToList();
     }
 
     private async Task DeleteIncome(int id)
     {
         IncomeService.DeleteIncome(id);
-        incomes = IncomeService.GetAllIncomes();
+        allIncomes = IncomeService.GetAllIncomes();
+        ApplyFilter();
     }
 }
