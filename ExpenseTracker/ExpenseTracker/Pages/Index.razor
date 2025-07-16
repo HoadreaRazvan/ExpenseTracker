@@ -1,10 +1,75 @@
 ﻿@page "/"
 
+@inject ExpenseTracker.Services.ExpenseService ExpenseService
+@inject ExpenseTracker.Services.IncomeService IncomeService
 
 <NavMenu />
 
 <h1>Home</h1>
 
-@code {
+@if (isLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div>
+        <h3>Statistici generale</h3>
 
+        <p><strong>Total Venituri:</strong> @TotalIncome.ToString("C") (@IncomeStartDate.ToShortDateString() - @IncomeEndDate.ToShortDateString())</p>
+        <p><strong>Total Cheltuieli:</strong> @TotalExpenses.ToString("C") (@ExpenseStartDate.ToShortDateString() - @ExpenseEndDate.ToShortDateString())</p>
+
+        <h3>Statistici lunare (@CurrentMonthName)</h3>
+
+        <p><strong>Venituri luna curenta:</strong> @MonthlyIncome.ToString("C")</p>
+        <p><strong>Cheltuieli luna curenta:</strong> @MonthlyExpenses.ToString("C")</p>
+
+        <h3>Balance:</h3>
+        <p style="color:@(Balance >= 0 ? "green" : "red")">
+            $@Balance
+        </p>
+    </div>
+}
+
+@code {
+    decimal TotalIncome;
+    decimal TotalExpenses;
+    decimal MonthlyIncome;
+    decimal MonthlyExpenses;
+    decimal Balance;
+
+    DateTime IncomeStartDate;
+    DateTime IncomeEndDate;
+    DateTime ExpenseStartDate;
+    DateTime ExpenseEndDate;
+
+    string CurrentMonthName = DateTime.Now.ToString("MMMM yyyy");
+
+    bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var incomes = IncomeService.GetAllIncomes();
+        var expenses = ExpenseService.GetAllExpenses();
+
+        if (incomes.Any())
+        {
+            IncomeStartDate = incomes.Min(i => i.Date);
+            IncomeEndDate = incomes.Max(i => i.Date);
+            TotalIncome = incomes.Sum(i => i.Amount);
+            MonthlyIncome = incomes.Where(i => i.Date.Month == DateTime.Now.Month && i.Date.Year == DateTime.Now.Year).Sum(i => i.Amount);
+        }
+
+        if (expenses.Any())
+        {
+            ExpenseStartDate = expenses.Min(e => e.Date);
+            ExpenseEndDate = expenses.Max(e => e.Date);
+            TotalExpenses = expenses.Sum(e => e.Amount);
+            MonthlyExpenses = expenses.Where(e => e.Date.Month == DateTime.Now.Month && e.Date.Year == DateTime.Now.Year).Sum(e => e.Amount);
+        }
+
+        Balance = TotalIncome - TotalExpenses;
+
+        isLoading = false;
+    }
 }
